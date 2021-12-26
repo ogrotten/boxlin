@@ -1,10 +1,10 @@
-import { GridScene } from './grid';
+import { Game } from './game';
+import { Setup } from './setup';
 import Phaser from 'phaser';
-import './style.css';
 
 const config: Phaser.Types.Core.GameConfig = {
-  width: 800,
-  height: 600,
+  width: 360,
+  height: 720,
   type: Phaser.AUTO,
   parent: 'game-container',
   physics: {
@@ -14,7 +14,9 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  scene: [GridScene]
+  scene: [Setup, Game],
+
+  backgroundColor: 0x222222
 };
 
 new Phaser.Game(config);
