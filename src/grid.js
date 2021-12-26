@@ -10,17 +10,17 @@ export class GridScene extends Phaser.Scene {
 		this.objects = {};
 	}
 	create() {
+		const { width, height } = this
 		this.add.grid(
-			this.width / 2,
-			this.height / 2,
-			this.width,
-			this.height,
-			50,
-			50,
+			width / 2,
+			height / 2,
+			width,
+			height,
+			width / 6,
+			height / 12,
 			0x111111
 		)
-			.setAltFillStyle(0x181818)
-			.setOutlineStyle();
-		// this.add.grid(300, 300, 512, 256, 64, 64, 0xffff00).setAltFillStyle(0x88ff00).setOutlineStyle();
+			.setAltFillStyle(0x141414)
+			.setOutlineStyle(0x181818)
 	}
 }
