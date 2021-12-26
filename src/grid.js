@@ -5,22 +5,30 @@ export class GridScene extends Phaser.Scene {
 		super({ key: "grid", active: true })
 	}
 	preload() {
-		this.height = this.game.config.height
-		this.width = this.game.config.width
-		this.objects = {};
+		const {
+			setup: {
+				colors: {
+					main, alt, lines
+				},
+				cols, rows
+			},
+			width, height,
+		} = this.game.config
+		console.log(`conlog: this`, this)
+		this.local = { width, height, main, alt, lines, cols, rows }
 	}
 	create() {
-		const { width, height } = this
+		const { width, height, main, alt, lines, cols, rows } = this.local
 		this.add.grid(
 			width / 2,
 			height / 2,
 			width,
 			height,
-			width / 6,
-			height / 12,
-			0x111111
+			width / cols,
+			height / rows,
+			main
 		)
-			.setAltFillStyle(0x141414)
-			.setOutlineStyle(0x181818)
+			.setAltFillStyle(alt)
+			.setOutlineStyle(lines)
 	}
 }
