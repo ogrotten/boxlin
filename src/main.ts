@@ -1,6 +1,6 @@
 import { GridScene } from './grid';
+import { Setup } from './setup';
 import Phaser from 'phaser';
-import './style.css';
 
 const config: Phaser.Types.Core.GameConfig = {
   width: 800,
@@ -14,7 +14,9 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  scene: [GridScene]
+  scene: [Setup, GridScene],
+
+  backgroundColor: 0x222222
 };
 
 new Phaser.Game(config);
