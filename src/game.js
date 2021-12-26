@@ -16,7 +16,7 @@ export class Game extends Phaser.Scene {
 			width, height,
 		} = this.game.config
 
-		const image = "assets/bomb.png"
+		this.load.image("bomb", "assets/bomb.png")
 		this.local = {
 			width,
 			height,
@@ -28,11 +28,10 @@ export class Game extends Phaser.Scene {
 			cellx: width / cols,
 			celly: height / rows,
 			tints: [0xff0000, 0x00ff00, 0x0000ff],
-			image
 		}
 	}
 	create() {
-		const { width, height, main, alt, lines, cols, rows, cellx, celly, tints, image } = this.local
+		const { width, height, main, alt, lines, cols, rows, cellx, celly, tints } = this.local
 		this.add.grid(
 			width / 2,
 			height / 2,
@@ -50,12 +49,13 @@ export class Game extends Phaser.Scene {
 
 		const pieces = new Array(4)
 
-		for (let i of pieces) {
-			this.load.image("bomb", image)
-			const piece = this.add.sprite(0, 0, "bomb").setTint(tints[Phaser.Math.RND.integerInRange(0, 3)]).setScale(2.5, 2.5).setOrigin(0.5, 0.5)
 
-			const xx = Phaser.Math.RND.integerInRange(0, cols)
-			const yy = Phaser.Math.RND.integerInRange(0, rows)
+		for (let [i, _] of pieces.entries()) {
+			const piece = this.add.sprite(0, 0, "bomb").setTint(tints[i]).setScale(2.5, 2.5).setOrigin(0.5, 0.5)
+
+			const xx = Phaser.Math.RND.integerInRange(0, cols - 1)
+			const yy = Phaser.Math.RND.integerInRange(0, rows - 1)
+			console.log(`conlog: xx, yy`, xx, yy)
 			grid.placeAt(xx, yy, piece)
 		}
 	}
