@@ -50,6 +50,11 @@
     "esbuild-windows-64" "0.13.4"
     "esbuild-windows-arm64" "0.13.4"
 
+"eventemitter3@^3.1.2":
+  "integrity" "sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q=="
+  "resolved" "https://registry.npmjs.org/eventemitter3/-/eventemitter3-3.1.2.tgz"
+  "version" "3.1.2"
+
 "eventemitter3@^4.0.7":
   "integrity" "sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw=="
   "resolved" "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
@@ -91,6 +96,11 @@
   "resolved" "https://registry.npmjs.org/nanoid/-/nanoid-3.1.29.tgz"
   "version" "3.1.29"
 
+"papaparse@^5.3.1":
+  "integrity" "sha512-Dbt2yjLJrCwH2sRqKFFJaN5XgIASO9YOFeFP8rIBRG2Ain8mqk5r1M6DkfvqEVozVcz3r3HaUGw253hA1nLIcA=="
+  "resolved" "https://registry.npmjs.org/papaparse/-/papaparse-5.3.1.tgz"
+  "version" "5.3.1"
+
 "path-parse@^1.0.6":
   "integrity" "sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw=="
   "resolved" "https://registry.npmjs.org/path-parse/-/path-parse-1.0.7.tgz"
@@ -111,6 +121,15 @@
   dependencies:
     "eventemitter3" "^4.0.7"
     "path" "^0.12.7"
+
+"phaser3-rex-plugins@^1.1.65":
+  "integrity" "sha512-shMAKA+pGAzm5uo3SNppFfquSO4sjZF+qs3ZFniJpJDS1yPriUUoZKz9RkfzzjDEJ6kuEOCd50fTKeDAjoApRg=="
+  "resolved" "https://registry.npmjs.org/phaser3-rex-plugins/-/phaser3-rex-plugins-1.1.65.tgz"
+  "version" "1.1.65"
+  dependencies:
+    "eventemitter3" "^3.1.2"
+    "papaparse" "^5.3.1"
+    "webfontloader" "^1.6.28"
 
 "picocolors@^0.2.1":
   "integrity" "sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA=="
@@ -189,3 +208,8 @@
     "rollup" "^2.57.0"
   optionalDependencies:
     "fsevents" "~2.3.2"
+
+"webfontloader@^1.6.28":
+  "integrity" "sha1-23hhKSU8tujq5UwvsF+HCvZnW64="
+  "resolved" "https://registry.npmjs.org/webfontloader/-/webfontloader-1.6.28.tgz"
+  "version" "1.6.28"
