@@ -17,6 +17,6 @@ export class BoardManager extends Phaser.GameObjects.Group {
 		obj.x = xpixel
 		obj.y = ypixel
 		this.inventory.set([xx, yy], { group: "yo" })
-		console.log(`conlog: this.inventory`, this.inventory)
+		console.log(`conlog: this.inventory`, this.inventory, obj)
 	}
 }

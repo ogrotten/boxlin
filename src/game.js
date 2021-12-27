@@ -54,6 +54,9 @@ export class Game extends Phaser.Scene {
 		const star = this.add.sprite(0, 0, "star").setTint(tints[3]).setScale(1.5, 1.5).setOrigin(0.5, 0.5)
 
 		let cluster = new Phaser.GameObjects.Group
+		cluster.on('pointerdown', function (pointer) {
+			console.log(`conlog: click`, pointer)
+		});
 
 		let shapeL = [[0, 0], [-1, 0], [-1, -1], [1, 0]]
 		let starrow = 3, starcol = 3
@@ -62,22 +65,22 @@ export class Game extends Phaser.Scene {
 			let pilot = [starrow, starcol]
 			let [setX, setY] = shapeL[i]
 			let subPiece = { ...star, shapeParent: pilot, }
-			debugger
-			cluster.add(subPiece)
-			debugger
+			// debugger
+			cluster.add(star)
+			// debugger
 			board.placeAt(
 				starrow + setX,
 				starcol + setY,
-				subPiece
+				this.add.sprite(0, 0, "star").setTint(tints[3]).setScale(1.5, 1.5).setOrigin(0.5, 0.5)
 			)
-			debugger
+			// debugger
 		}
 
 		// board.placeAt(3, 3, star)
 
 
-		const xx = RND(0, cols - 1)
-		const yy = RND(0, rows - 1)
-		board.placeAt(xx, yy, bomb)
+		// const xx = RND(0, cols - 1)
+		// const yy = RND(0, rows - 1)
+		// board.placeAt(xx, yy, bomb)
 	}
 }
