@@ -29,13 +29,14 @@ export class BroadTest extends Phaser.Scene {
 		var board = new Board(this, {
 			// grid: getHexagonGrid(this),
 			grid: getQuadGrid(this),
-			width: 8,
-			height: 8
+			width: 4,
+			height: 4,
 		})
-			.forEachTileXY(function (tileXY, board) {
-				var points = board.getGridPoints(tileXY.x, tileXY.y, true);
-				graphics.strokePoints(points, true);
-			}, this);
+		debugger
+		board.forEachTileXY(function (tileXY, board) {
+			var points = board.getGridPoints(tileXY.x, tileXY.y, true);
+			graphics.strokePoints(points, true);
+		}, this);
 	}
 
 	update() { }
@@ -43,9 +44,9 @@ export class BroadTest extends Phaser.Scene {
 
 var getQuadGrid = function (scene) {
 	var grid = new QuadGrid(scene, {
-		x: 400,
-		y: 100,
-		cellWidth: 100,
+		x: 0,
+		y: 0,
+		cellWidth: 50,
 		cellHeight: 50,
 		type: 1
 	});
