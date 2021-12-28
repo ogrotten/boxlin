@@ -70,6 +70,7 @@ export class Setup extends Phaser.Scene {
 				tileXY.x, tileXY.y, 0,
 				Random(0, 0xffffff)
 			)
+			this.add.existing(chess)
 			board.addChess(chess, tileXY.x, tileXY.y, 0, true)
 			this.add.text(chess.x, chess.y, `${tileXY.x},${tileXY.y}`)
 				.setOrigin(0.5)
