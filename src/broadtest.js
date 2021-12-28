@@ -1,8 +1,8 @@
 import Phaser from "phaser";
-import { Board } from "phaser3-rex-plugins/plugins/board-components";
-// import { Board, HexagonGrid, QuadGrid } from 'phaser3-rex-plugins/plugins/board-components.js';
+// import { Board } from "phaser3-rex-plugins/plugins/board-components";
+import { Board, HexagonGrid, QuadGrid, Shape } from 'phaser3-rex-plugins/plugins/board-components.js';
 
-import BoardPlugin from 'phaser3-rex-plugins/plugins/board-plugin.js';
+// import BoardPlugin from 'phaser3-rex-plugins/plugins/board-plugin.js';
 
 
 
@@ -24,31 +24,22 @@ export class BroadTest extends Phaser.Scene {
 	preload() { }
 
 	create() {
-		var board = new BoardPlugin.Board({
+		var board = new Board(this, {
 			// grid: getHexagonGrid(this),
-			// grid: getQuadGrid(this),
-			grid: {
-				gridType: 'hexagonGrid',
-				x: 50,
-				y: 50,
-				size: 50,
-				staggeraxis: 'x',
-				staggerindex: 'odd'
-			},
-
+			grid: getQuadGrid(this),
 			width: 20,
 			height: 20
 		})
 			.forEachTileXY(function (tileXY, board) {
 				var scene = board.scene;
-				var chess = scene.rexBoard.add.shape(
+				var chess = new Shape(
 					board,
 					tileXY.x, tileXY.y, 0,
 					Random(0, 0xffffff), 0.7
 				);
-				this.add.text(chess.x, chess.y, tileXY.x + ',' + tileXY.y)
+				scene.add.text(chess.x, chess.y, `${tileXY.x}, ${tileXY.y}`)
 					.setOrigin(0.5)
-					.setTint(0x0);
+					.setTint(0xffffff);
 			});
 
 		board
@@ -118,7 +109,7 @@ export class BroadTest extends Phaser.Scene {
 }
 
 var getQuadGrid = function (scene) {
-	var grid = scene.rexBoard.add.quadGrid({
+	var grid = new QuadGrid({
 		x: 400,
 		y: 100,
 		cellWidth: 100,
@@ -129,7 +120,7 @@ var getQuadGrid = function (scene) {
 }
 
 var getHexagonGrid = function (scene) {
-	var grid = scene.rexBoard.add.hexagonGrid({
+	var grid = new HexagonGrid({
 		x: 50,
 		y: 50,
 		size: 50,
