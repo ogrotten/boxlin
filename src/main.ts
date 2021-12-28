@@ -16,7 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
     }
   },
   // scene: [Setup, Game],
-  scene: [BroadTest],
+  scene: [Setup],
 
   backgroundColor: 0x222222
 };
