@@ -1,10 +1,16 @@
 import Phaser from "phaser";
 import { Board, HexagonGrid, QuadGrid, Shape } from 'phaser3-rex-plugins/plugins/board-components.js';
+import FadeOutDestroy from 'phaser3-rex-plugins/plugins/fade-out-destroy.js';
 
 const Random = Phaser.Math.Between;
+
+const shapes = {
+	L: [[0, 0], [0, -1], [0, 1], [1, 1]],
+	// L: [[0, 0], [-1, 0], [-1, -1], [1, 0]]
+}
 export class Setup extends Phaser.Scene {
 	constructor() {
-		super({ key: "setup", active: true })
+		super({ key: "setup", active: true, visible: false })
 	}
 	RND(min, max) { return Phaser.Math.RND.integerInRange(min, max) }
 	colors = [0xCE93D8,
@@ -19,9 +25,6 @@ export class Setup extends Phaser.Scene {
 		0x8d6800]
 
 	preload() {
-		// const { width, height } = this.game.config
-		// this.camera = this.cameras.add(0, 0, width, height);
-		// this.camera.setBackgroundColor('rgba(64,64,64, 0.0)');
 		this.game.config.setup = {
 			cols: 6,
 			rows: 12,
@@ -44,13 +47,7 @@ export class Setup extends Phaser.Scene {
 			},
 			width, height,
 		} = this.game.config
-		// var graphics = this.add.graphics({
-		// 	lineStyle: {
-		// 		width: 1,
-		// 		color: 0xffffff,
-		// 		alpha: 1
-		// 	}
-		// });
+
 		var board = new Board(this, {
 			grid: {
 				gridType: 'quadGrid',
@@ -64,7 +61,6 @@ export class Setup extends Phaser.Scene {
 			height: rows,
 		}).forEachTileXY((tileXY, board) => {
 			let points = board.getGridPoints(tileXY.x, tileXY.y, true);
-			// graphics.strokePoints(points, true);
 			var chess = new Shape(
 				board,
 				tileXY.x, tileXY.y, 0,
@@ -75,15 +71,18 @@ export class Setup extends Phaser.Scene {
 			this.add.text(chess.x, chess.y, `${tileXY.x},${tileXY.y}`)
 				.setOrigin(0.5)
 				.setTint(0xffffff);
-			// ).setFillStyle(this.colors[this.RND(0, this.colors.length)])
 		}, this);
 
 		board.setInteractive()
+			.on('tiledown', function (press, tileXY) {
+				console.log('destroy ' + tileXY.x + ',' + tileXY.y);
+				FadeOutDestroy(board.tileXYZToChess(tileXY.x, tileXY.y, 0), 0.8);
+			})
 			.on('tileover', (pointer, tileXY) => {
 				console.log('over ' + tileXY.x + ',' + tileXY.y);
 			})
-
 	}
+
 	update() {
 		this.scene.setVisible(true)
 	}
