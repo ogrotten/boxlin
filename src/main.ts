@@ -1,4 +1,5 @@
 import { Game } from './game';
+import { BroadTest } from './broadtest';
 import { Setup } from './setup';
 import Phaser from 'phaser';
 
@@ -14,7 +15,8 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false
     }
   },
-  scene: [Setup, Game],
+  // scene: [Setup, Game],
+  scene: [Setup],
 
   backgroundColor: 0x222222
 };
