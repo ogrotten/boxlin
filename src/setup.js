@@ -12,9 +12,22 @@ export class Setup extends Phaser.Scene {
 	}
 
 	preload() {
-		const colors = {
-			color0: 0xff0000, color1: 0x00ff00, color2: 0x0044ff, color3: 0xff00ff, color4: 0xff8800, color5: 0xffff00, main: 0x111111, alt: 0x141414, lines: 0x181818,
-		}
+		// const colors = {
+		// 	color0: 0xff0000, color1: 0x00ff00, color2: 0x0044ff, color3: 0xff00ff, color4: 0xff8800, color5: 0xffff00, main: 0x111111, alt: 0x141414, lines: 0x181818,
+		// }
+
+		const colors = [
+			0xff0000,
+			0x00ff00,
+			0x0044ff,
+			0xff00ff,
+			0xff8800,
+			0xffff00,
+			0x111111,
+			0x141414,
+			0x181818,
+		]
+
 		this.game.config.setup = {
 			cols: 6,
 			rows: 12,
@@ -76,7 +89,7 @@ export class Setup extends Phaser.Scene {
 			var tiles = GetAGroup(board, inventory).getItems();
 			var rndnum = Random(0, 5);
 			// debugger
-			PlaceGroup(board, tiles, "board", `color${rndnum}`, cell);
+			PlaceGroup(board, tiles, "board", `color${rndnum}`);
 			if (inventory.length > 0) {
 				this.time.delayedCall(500, Build, [board, inventory], this);
 			}
@@ -112,7 +125,7 @@ const quadGrid = (scene, cols, rows, cell) => {
 }
 
 
-var PlaceGroup = function (board, tiles, texture, key, cell) {
+var PlaceGroup = function (board, tiles, texture, color) {
 	var scene = board.scene;
 	var grid = board.grid;
 
@@ -127,8 +140,8 @@ var PlaceGroup = function (board, tiles, texture, key, cell) {
 		var tileXY = tiles[i].rexChess.tileXYZ;
 
 		// var chess = scene.add.image(0, 0, texture, key);
-		const chess = new Shape(board, grid.x, grid.y, 0, key)
-		debugger
+		const chess = new Shape(board, grid.x, grid.y, 0, color)
+		// debugger
 
 		miniBoard.addChess(chess, tileXY.x, tileXY.y, 1);
 	}
