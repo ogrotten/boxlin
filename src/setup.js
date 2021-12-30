@@ -12,21 +12,8 @@ export class Setup extends Phaser.Scene {
 	}
 
 	preload() {
-		// const colors = {
-		// 	color0: 0xff0000, color1: 0x00ff00, color2: 0x0044ff, color3: 0xff00ff, color4: 0xff8800, color5: 0xffff00, main: 0x111111, alt: 0x141414, lines: 0x181818,
-		// }
 
-		const colors = [
-			0xff0000,
-			0x00ff00,
-			0x0044ff,
-			0xff00ff,
-			0xff8800,
-			0xffff00,
-			0x111111,
-			0x141414,
-			0x181818,
-		]
+		const colors = [0xff0000, 0x00ff00, 0x0044ff, 0xff00ff, 0xff8800, 0xffff00, 0x111111, 0x141414, 0x181818,]
 
 		this.game.config.setup = {
 			cols: 6,
@@ -101,15 +88,6 @@ export class Setup extends Phaser.Scene {
 			}
 		};
 		Build.call(this, board, inventory);
-
-		// board.setInteractive()
-		// 	.on('tiledown', function (press, tileXY) {
-		// 		console.log('destroy ' + tileXY.x + ',' + tileXY.y);
-		// 		FadeOutDestroy(board.tileXYZToChess(tileXY.x, tileXY.y, 0), 100);
-		// 	})
-		// 	.on('tileover', (pointer, tileXY) => {
-		// 		console.log('over ' + tileXY.x + ',' + tileXY.y);
-		// 	})
 	}
 
 	update() {
@@ -147,14 +125,12 @@ var PlaceGroup = function (board, tiles, texture, color) {
 
 		// var chess = scene.add.image(0, 0, texture, key);
 		const chess = new Shape(board, grid.x, grid.y, 0, color).setScale(.98)
-		// debugger
 		scene.add.existing(chess)
 		miniBoard.addChess(chess, tileXY.x, tileXY.y, 0);
 	}
 	// Set origin, put on main board
 	miniBoard.setOrigin().putOnMainBoard(board);
 
-	// Add drag behavior
 	miniBoard
 		.on('pointerdown', function (press, tileXY) {
 			// console.log('destroy ' + tileXY.x + ',' + tileXY.y);
@@ -162,37 +138,6 @@ var PlaceGroup = function (board, tiles, texture, color) {
 				FadeOutDestroy(e, 100);
 			})
 		})
-	// .on(
-	// 	"dragstart",
-	// 	function (pointer, dragX, dragY) {
-	// 		this.pullOutFromMainBoard();
-	// 		this.setAlpha(0.3);
-	// 	},
-	// 	miniBoard
-	// )
-	// .on(
-	// 	"drag",
-	// 	function (pointer, dragX, dragY) {
-	// 		this.setPosition(dragX, dragY);
-	// 		if (this.isOverlapping(board)) {
-	// 			this.setAlpha(0.7);
-	// 			this.alignToMainBoard(board);
-	// 		} else {
-	// 			this.setAlpha(0.3);
-	// 		}
-	// 	},
-	// 	miniBoard
-	// )
-	// .on(
-	// 	"dragend",
-	// 	function (pointer, dragX, dragY) {
-	// 		this.putOnMainBoard(board);
-	// 		if (this.mainBoard) {
-	// 			this.setAlpha(1);
-	// 		}
-	// 	},
-	// 	miniBoard
-	// );
 	return miniBoard;
 };
 
