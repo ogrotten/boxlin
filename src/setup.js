@@ -12,21 +12,8 @@ export class Setup extends Phaser.Scene {
 	}
 
 	preload() {
-		// const colors = {
-		// 	color0: 0xff0000, color1: 0x00ff00, color2: 0x0044ff, color3: 0xff00ff, color4: 0xff8800, color5: 0xffff00, main: 0x111111, alt: 0x141414, lines: 0x181818,
-		// }
 
-		const colors = [
-			0xff0000,
-			0x00ff00,
-			0x0044ff,
-			0xff00ff,
-			0xff8800,
-			0xffff00,
-			0x111111,
-			0x141414,
-			0x181818,
-		]
+		const colors = [0xff0000, 0x00ff00, 0x0044ff, 0xff00ff, 0xff8800, 0xffff00, 0x111111, 0x141414, 0x181818,]
 
 		this.game.config.setup = {
 			cols: 6,
@@ -48,6 +35,7 @@ export class Setup extends Phaser.Scene {
 			width, height,
 		} = this.game.config
 
+		let cellId = 0
 		var board = new Board(this, {
 			grid: {
 				gridType: 'quadGrid',
@@ -65,11 +53,12 @@ export class Setup extends Phaser.Scene {
 				board,
 				tileXY.x, tileXY.y, 0,
 				colors[6]
-			).setScale(.95)
+			).setScale(.95).setName(`cell${cellId}`)
 			// build2(chess)
 			this.add.existing(chess)
 			board.addChess(chess, tileXY.x, tileXY.y, 0, true)
-		}, this);
+			cellId++
+		}, this, 0);
 
 		// to track built cells
 		let tiles = board.tileZToChessArray(0)
@@ -99,15 +88,6 @@ export class Setup extends Phaser.Scene {
 			}
 		};
 		Build.call(this, board, inventory);
-
-		// board.setInteractive()
-		// 	.on('tiledown', function (press, tileXY) {
-		// 		console.log('destroy ' + tileXY.x + ',' + tileXY.y);
-		// 		FadeOutDestroy(board.tileXYZToChess(tileXY.x, tileXY.y, 0), 100);
-		// 	})
-		// 	.on('tileover', (pointer, tileXY) => {
-		// 		console.log('over ' + tileXY.x + ',' + tileXY.y);
-		// 	})
 	}
 
 	update() {
@@ -144,51 +124,20 @@ var PlaceGroup = function (board, tiles, texture, color) {
 		var tileXY = tiles[i].rexChess.tileXYZ;
 
 		// var chess = scene.add.image(0, 0, texture, key);
-		const chess = new Shape(board, grid.x, grid.y, 0, color)
-		// debugger
+		const chess = new Shape(board, grid.x, grid.y, 0, color).setScale(.98)
 		scene.add.existing(chess)
 		miniBoard.addChess(chess, tileXY.x, tileXY.y, 0);
 	}
 	// Set origin, put on main board
 	miniBoard.setOrigin().putOnMainBoard(board);
 
-	// Add drag behavior
 	miniBoard
 		.on('pointerdown', function (press, tileXY) {
-			console.log('destroy ' + tileXY.x + ',' + tileXY.y);
-			// FadeOutDestroy(board.tileXYZToChess(tileXY.x, tileXY.y, 0), 100);
+			// console.log('destroy ' + tileXY.x + ',' + tileXY.y);
+			tileXY.children.forEach(e => {
+				FadeOutDestroy(e, 100);
+			})
 		})
-	// .on(
-	// 	"dragstart",
-	// 	function (pointer, dragX, dragY) {
-	// 		this.pullOutFromMainBoard();
-	// 		this.setAlpha(0.3);
-	// 	},
-	// 	miniBoard
-	// )
-	// .on(
-	// 	"drag",
-	// 	function (pointer, dragX, dragY) {
-	// 		this.setPosition(dragX, dragY);
-	// 		if (this.isOverlapping(board)) {
-	// 			this.setAlpha(0.7);
-	// 			this.alignToMainBoard(board);
-	// 		} else {
-	// 			this.setAlpha(0.3);
-	// 		}
-	// 	},
-	// 	miniBoard
-	// )
-	// .on(
-	// 	"dragend",
-	// 	function (pointer, dragX, dragY) {
-	// 		this.putOnMainBoard(board);
-	// 		if (this.mainBoard) {
-	// 			this.setAlpha(1);
-	// 		}
-	// 	},
-	// 	miniBoard
-	// );
 	return miniBoard;
 };
 
@@ -198,18 +147,11 @@ var GetAGroup = function (board, inventory) {
 	var group = new UniqueItemList({ enableDestroyCallback: false });
 	var tile = inventory.getLast();
 	var neighbors;
-	for (var i = 0; i < 4; i++) {
-		group.add(tile);
-		inventory.remove(tile);
-		neighbors = GetNeighborsGroup(board, tile, neighbors);
-		neighbors.intersect(inventory, neighbors);
-		if (neighbors.length > 0) {
-			tile = neighbors.getRandom();
-		} else {
-			break;
-		}
-	}
+	// Random(0, 1) === 1
+	// 	? group = build4(group, tile, board, neighbors, inventory)
+	// 	: group = build2(group, tile, board, neighbors, inventory)
 	// debugger
+	group = build4(group, tile, board, neighbors, inventory)
 	return group;
 };
 
@@ -224,9 +166,63 @@ var GetNeighborsGroup = function (board, tile, out) {
 };
 
 
-const build2 = () => {
+const build2 = (group, tile, board, neighbors, inventory) => {
+	for (var i = 0; i < 2; i++) {
+		group.add(tile);
+		inventory.remove(tile);
+		neighbors = GetNeighborsGroup(board, tile, neighbors);
+		neighbors.intersect(inventory, neighbors);
+		if (neighbors.length > 0) {
+			tile = neighbors.getRandom();
+		} else {
+			break;
+		}
+	}
 
+	return group
 }
+
+const build4 = (group, tile, board, neighbors, inventory) => {
+	for (var i = 0; i < 2; i++) {
+		group.add(tile);
+		inventory.remove(tile);
+		neighbors = GetNeighborsGroup(board, tile, neighbors);
+		neighbors.intersect(inventory, neighbors);
+		if (neighbors.length > 0) {
+			tile = neighbors.getRandom();
+		} else {
+			break;
+		}
+	}
+	const direction = board.getNeighborTileDirection(group.getFirst(), group.getLast())
+	console.log(`conlog: direction`, direction)
+
+	const nuderection = direction % 2 === 0 ? 1 : 0
+
+	for (var i = 0; i < 2; i++) {
+		tile = board.getNeighborChess(group.get(i), nuderection)
+		group.add(tile);
+		inventory.remove(tile);
+	}
+
+	return group
+}
+
+const buildTetris = (group, tile, board, neighbors, inventory) => {
+	for (var i = 0; i < 4; i++) {
+		group.add(tile);
+		inventory.remove(tile);
+		neighbors = GetNeighborsGroup(board, tile, neighbors);
+		neighbors.intersect(inventory, neighbors);
+		if (neighbors.length > 0) {
+			tile = neighbors.getRandom();
+		} else {
+			break;
+		}
+	}
+	return group
+}
+
 
 /*
 
