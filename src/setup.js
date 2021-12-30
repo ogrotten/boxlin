@@ -141,10 +141,11 @@ var PlaceGroup = function (board, tiles, texture, color) {
 
 	// Add chess
 	for (var i = 0, cnt = tiles.length; i < cnt; i++) {
+		console.log(`conlog: tiles[i]`, tiles, i)
 		var tileXY = tiles[i].rexChess.tileXYZ;
 
 		// var chess = scene.add.image(0, 0, texture, key);
-		const chess = new Shape(board, grid.x, grid.y, 0, color)
+		const chess = new Shape(board, grid.x, grid.y, 0, color).setScale(.98)
 		// debugger
 		scene.add.existing(chess)
 		miniBoard.addChess(chess, tileXY.x, tileXY.y, 0);
@@ -198,7 +199,9 @@ var GetAGroup = function (board, inventory) {
 	var group = new UniqueItemList({ enableDestroyCallback: false });
 	var tile = inventory.getLast();
 	var neighbors;
-	group = build4(group, tile, board, neighbors, inventory)
+	Random(0, 1) === 1
+		? group = build4(group, tile, board, neighbors, inventory)
+		: group = build2(group, tile, board, neighbors, inventory)
 	// debugger
 	return group;
 };
