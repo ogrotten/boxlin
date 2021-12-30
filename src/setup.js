@@ -64,18 +64,22 @@ export class Setup extends Phaser.Scene {
 			var chess = new Shape(
 				board,
 				tileXY.x, tileXY.y, 0,
-				colors[Random(0, 5)]
-			)
-			build2(chess)
+				colors[6]
+			).setScale(.95)
+			// build2(chess)
 			this.add.existing(chess)
 			board.addChess(chess, tileXY.x, tileXY.y, 0, true)
 		}, this);
 
 		// to track built cells
 		let tiles = board.tileZToChessArray(0)
+
+		// sort by distance from upper left corner
 		tiles.sort((tileA, tileB) => {
 			const tileXYA = tileA.rexChess.tileXYZ;
 			const tileXYB = tileB.rexChess.tileXYZ;
+
+			// from upper left corner
 			const distA = Phaser.Math.Distance.Squared(tileXYA.x, tileXYA.y, 0, 0);
 			const distB = Phaser.Math.Distance.Squared(tileXYB.x, tileXYB.y, 0, 0);
 			return distA - distB;
@@ -89,7 +93,7 @@ export class Setup extends Phaser.Scene {
 			var tiles = GetAGroup(board, inventory).getItems();
 			var rndnum = Random(0, 5);
 			// debugger
-			PlaceGroup(board, tiles, "board", `color${rndnum}`);
+			PlaceGroup(board, tiles, "board", colors[rndnum]);
 			if (inventory.length > 0) {
 				this.time.delayedCall(500, Build, [board, inventory], this);
 			}
@@ -142,8 +146,8 @@ var PlaceGroup = function (board, tiles, texture, color) {
 		// var chess = scene.add.image(0, 0, texture, key);
 		const chess = new Shape(board, grid.x, grid.y, 0, color)
 		// debugger
-
-		miniBoard.addChess(chess, tileXY.x, tileXY.y, 1);
+		scene.add.existing(chess)
+		miniBoard.addChess(chess, tileXY.x, tileXY.y, 0);
 	}
 	// Set origin, put on main board
 	miniBoard.setOrigin().putOnMainBoard(board);
@@ -189,16 +193,16 @@ var PlaceGroup = function (board, tiles, texture, color) {
 };
 
 // Pick 4 connected tiles
-var GetAGroup = function (board, candidates) {
+var GetAGroup = function (board, inventory) {
 	var scene = board.scene;
 	var group = new UniqueItemList({ enableDestroyCallback: false });
-	var tile = candidates.getLast();
+	var tile = inventory.getLast();
 	var neighbors;
 	for (var i = 0; i < 4; i++) {
 		group.add(tile);
-		candidates.remove(tile);
+		inventory.remove(tile);
 		neighbors = GetNeighborsGroup(board, tile, neighbors);
-		neighbors.intersect(candidates, neighbors);
+		neighbors.intersect(inventory, neighbors);
 		if (neighbors.length > 0) {
 			tile = neighbors.getRandom();
 		} else {
