@@ -159,8 +159,7 @@ var PlaceGroup = function (board, tiles, texture, color) {
 		.on('pointerdown', function (press, tileXY) {
 			// console.log('destroy ' + tileXY.x + ',' + tileXY.y);
 			tileXY.children.forEach(e => {
-				console.log(`conlog: e`, e)
-				FadeOutDestroy(board.tileXYZToChess(e.x, e.y, 0), 100);
+				FadeOutDestroy(e, 100);
 			})
 		})
 	// .on(
