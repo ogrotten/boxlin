@@ -198,17 +198,7 @@ var GetAGroup = function (board, inventory) {
 	var group = new UniqueItemList({ enableDestroyCallback: false });
 	var tile = inventory.getLast();
 	var neighbors;
-	for (var i = 0; i < 4; i++) {
-		group.add(tile);
-		inventory.remove(tile);
-		neighbors = GetNeighborsGroup(board, tile, neighbors);
-		neighbors.intersect(inventory, neighbors);
-		if (neighbors.length > 0) {
-			tile = neighbors.getRandom();
-		} else {
-			break;
-		}
-	}
+	group = build4(group, tile, board, neighbors, inventory)
 	// debugger
 	return group;
 };
@@ -224,9 +214,63 @@ var GetNeighborsGroup = function (board, tile, out) {
 };
 
 
-const build2 = () => {
+const build2 = (group, tile, board, neighbors, inventory) => {
+	for (var i = 0; i < 2; i++) {
+		group.add(tile);
+		inventory.remove(tile);
+		neighbors = GetNeighborsGroup(board, tile, neighbors);
+		neighbors.intersect(inventory, neighbors);
+		if (neighbors.length > 0) {
+			tile = neighbors.getRandom();
+		} else {
+			break;
+		}
+	}
 
+	return group
 }
+
+const build4 = (group, tile, board, neighbors, inventory) => {
+	for (var i = 0; i < 2; i++) {
+		group.add(tile);
+		inventory.remove(tile);
+		neighbors = GetNeighborsGroup(board, tile, neighbors);
+		neighbors.intersect(inventory, neighbors);
+		if (neighbors.length > 0) {
+			tile = neighbors.getRandom();
+		} else {
+			break;
+		}
+	}
+	const direction = board.getNeighborTileDirection(group.getFirst(), group.getLast())
+	console.log(`conlog: direction`, direction)
+
+	const nuderection = direction % 2 === 0 ? 1 : 0
+
+	for (var i = 0; i < 2; i++) {
+		tile = board.getNeighborChess(group.get(i), nuderection)
+		group.add(tile);
+		inventory.remove(tile);
+	}
+
+	return group
+}
+
+const buildTetris = (group, tile, board, neighbors, inventory) => {
+	for (var i = 0; i < 4; i++) {
+		group.add(tile);
+		inventory.remove(tile);
+		neighbors = GetNeighborsGroup(board, tile, neighbors);
+		neighbors.intersect(inventory, neighbors);
+		if (neighbors.length > 0) {
+			tile = neighbors.getRandom();
+		} else {
+			break;
+		}
+	}
+	return group
+}
+
 
 /*
 
