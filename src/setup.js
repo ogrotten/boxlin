@@ -48,6 +48,7 @@ export class Setup extends Phaser.Scene {
 			width, height,
 		} = this.game.config
 
+		let cellId = 0
 		var board = new Board(this, {
 			grid: {
 				gridType: 'quadGrid',
@@ -65,11 +66,12 @@ export class Setup extends Phaser.Scene {
 				board,
 				tileXY.x, tileXY.y, 0,
 				colors[6]
-			).setScale(.95)
+			).setScale(.95).setName(`cell${cellId}`)
 			// build2(chess)
 			this.add.existing(chess)
 			board.addChess(chess, tileXY.x, tileXY.y, 0, true)
-		}, this);
+			cellId++
+		}, this, 0);
 
 		// to track built cells
 		let tiles = board.tileZToChessArray(0)
@@ -141,7 +143,6 @@ var PlaceGroup = function (board, tiles, texture, color) {
 
 	// Add chess
 	for (var i = 0, cnt = tiles.length; i < cnt; i++) {
-		console.log(`conlog: tiles[i]`, tiles, i)
 		var tileXY = tiles[i].rexChess.tileXYZ;
 
 		// var chess = scene.add.image(0, 0, texture, key);
@@ -156,8 +157,11 @@ var PlaceGroup = function (board, tiles, texture, color) {
 	// Add drag behavior
 	miniBoard
 		.on('pointerdown', function (press, tileXY) {
-			console.log('destroy ' + tileXY.x + ',' + tileXY.y);
-			// FadeOutDestroy(board.tileXYZToChess(tileXY.x, tileXY.y, 0), 100);
+			// console.log('destroy ' + tileXY.x + ',' + tileXY.y);
+			tileXY.children.forEach(e => {
+				console.log(`conlog: e`, e)
+				FadeOutDestroy(board.tileXYZToChess(e.x, e.y, 0), 100);
+			})
 		})
 	// .on(
 	// 	"dragstart",
@@ -199,10 +203,11 @@ var GetAGroup = function (board, inventory) {
 	var group = new UniqueItemList({ enableDestroyCallback: false });
 	var tile = inventory.getLast();
 	var neighbors;
-	Random(0, 1) === 1
-		? group = build4(group, tile, board, neighbors, inventory)
-		: group = build2(group, tile, board, neighbors, inventory)
+	// Random(0, 1) === 1
+	// 	? group = build4(group, tile, board, neighbors, inventory)
+	// 	: group = build2(group, tile, board, neighbors, inventory)
 	// debugger
+	group = build4(group, tile, board, neighbors, inventory)
 	return group;
 };
 
