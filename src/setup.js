@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Board, MiniBoard, HexagonGrid, QuadGrid, Shape } from 'phaser3-rex-plugins/plugins/board-components.js';
 import FadeOutDestroy from 'phaser3-rex-plugins/plugins/fade-out-destroy.js';
 import UniqueItemList from 'phaser3-rex-plugins/plugins/uniqueitemlist.js';
+import Rectangle from "phaser3-rex-plugins/plugins/utils/geom/rectangle/Rectangle";
 
 const Random = Phaser.Math.Between
 
@@ -66,16 +67,16 @@ export class Setup extends Phaser.Scene {
 			const distB = Phaser.Math.Distance.Squared(tileXYB.x, tileXYB.y, 0, 0);
 			return distA - distB;
 		})
-		let inventory = new UniqueItemList()
-			.add({ autoCleanup: false })
+		let inventory = new UniqueItemList({ autoCleanup: false })
 			.addMultiple(tiles)
 			.reverse();
 
 		// build cells
 		var Build = function (board, inventory) {
 			var tiles = GetAGroup(board, inventory).getItems();
-			var symbol = Random(0, 5);
-			PlaceGroup(board, tiles, "board", `chess${symbol}`);
+			var rndnum = Random(0, 5);
+			// debugger
+			PlaceGroup(board, tiles, "board", `color${rndnum}`, cell);
 			if (inventory.length > 0) {
 				this.time.delayedCall(500, Build, [board, inventory], this);
 			}
@@ -111,21 +112,24 @@ const quadGrid = (scene, cols, rows, cell) => {
 }
 
 
-var PlaceGroup = function (board, tiles, texture, key) {
+var PlaceGroup = function (board, tiles, texture, key, cell) {
 	var scene = board.scene;
 	var grid = board.grid;
-	// debugger
+
 	// Create mini board
 	var miniBoard = new MiniBoard(scene, grid.x, grid.y, {
 		grid: grid,
 		draggable: false
 	});
+
 	// Add chess
 	for (var i = 0, cnt = tiles.length; i < cnt; i++) {
-		debugger
 		var tileXY = tiles[i].rexChess.tileXYZ;
-		var chess = scene.add.image(0, 0, texture, key);
-		// setTimeout(() => miniBoard.addChess(chess, tileXY.x, tileXY.y, 1), 1000)
+
+		// var chess = scene.add.image(0, 0, texture, key);
+		const chess = new Shape(board, grid.x, grid.y, 0, key)
+		debugger
+
 		miniBoard.addChess(chess, tileXY.x, tileXY.y, 1);
 	}
 	// Set origin, put on main board
@@ -174,7 +178,7 @@ var PlaceGroup = function (board, tiles, texture, key) {
 // Pick 4 connected tiles
 var GetAGroup = function (board, candidates) {
 	var scene = board.scene;
-	var group = new UniqueItemList().add({ enableDestroyCallback: false });
+	var group = new UniqueItemList({ enableDestroyCallback: false });
 	var tile = candidates.getLast();
 	var neighbors;
 	for (var i = 0; i < 4; i++) {
@@ -188,6 +192,7 @@ var GetAGroup = function (board, candidates) {
 			break;
 		}
 	}
+	// debugger
 	return group;
 };
 
@@ -195,7 +200,7 @@ var GetAGroup = function (board, candidates) {
 var GetNeighborsGroup = function (board, tile, out) {
 	var scene = board.scene;
 	if (out === undefined) {
-		out = new UniqueItemList().add({ enableDestroyCallback: false });
+		out = new UniqueItemList({ enableDestroyCallback: false });
 	}
 	out.addMultiple(board.getNeighborChess(tile, null));
 	return out;
